@@ -137,11 +137,11 @@ struct rtw88_dma_alloc_ops *rtw88_dma_ops      = NULL;
 struct pci_ops_rtw88       *rtw88_pci_io_ops   = NULL;
 struct rtw88_usb_ops       *rtw88_usb_io_ops   = NULL;
 
-/* Diagnostic flag consumed by rtw_watch_dog_work() in main.c.  Default true:
- * the watchdog keeps rescheduling but performs no RF-dynamic work, to test
- * whether DPK/power-tracking is wedging BE TX.  Flip to false to restore
- * normal watchdog behaviour. */
-bool rtw88_disable_watchdog_work = true;
+/* Diagnostic flag consumed by rtw_watch_dog_work() in main.c.  Default false
+ * in normal operation: the watchdog performs RF-dynamic work (DIG, rate
+ * adapt, DPK/power tracking).  Set true only for targeted diagnostics when
+ * you suspect periodic RF routines are wedging TX. */
+bool rtw88_disable_watchdog_work = false;
 
 /* ------------------------------------------------------------------ */
 /*  Workqueue implementation (kernel threads + IOLock)                  */
