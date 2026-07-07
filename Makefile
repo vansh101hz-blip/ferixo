@@ -22,13 +22,7 @@ MAKEFLAGS += -j$(shell sysctl -n hw.logicalcpu)
 
 PROJ_ROOT    := $(shell pwd)
 
-STABLE_REPO ?=
-STABLE_REPO_CANDIDATES := \
-    $(RTW88_STABLE_REPO) \
-    $(PROJ_ROOT)/../stabler88w \
-    $(PROJ_ROOT)/../rtw88-stable
-STABLE_REPO := $(firstword $(foreach dir,$(STABLE_REPO_CANDIDATES),$(if $(wildcard $(dir)/drivers/net/wireless/realtek/rtw88),$(dir),)))
-LINUX_SRC ?= $(if $(STABLE_REPO),$(STABLE_REPO)/drivers/net/wireless/realtek/rtw88,$(PROJ_ROOT)/../stabler88w/drivers/net/wireless/realtek/rtw88)
+LINUX_SRC    := $(PROJ_ROOT)/../rtw88-stable/drivers/net/wireless/realtek/rtw88
 
 COMPAT_DIR   := $(PROJ_ROOT)/src/compat
 KEXT_SRC     := $(PROJ_ROOT)/src/kext
