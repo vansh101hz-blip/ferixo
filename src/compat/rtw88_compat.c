@@ -120,14 +120,33 @@ boolean_t thread_call_cancel_wait(thread_call_t call)
  * This mirrors the standard behaviour: sign-extend a value with the
  * specified number of significant bits (1..31).  Return the extended
  * value as a signed 64-bit long so callers get a compatible type.
+ *
+ * We also provide an explicit Mach-O alias for _sign_extend32 because the
+ * kext linker in macOS kernelmanagement looks for that exact symbol name.
  */
+/* ------------------------------------------------------------------ */
+/*  sign_extend32 — missing on macOS 15+                              */
+/* ------------------------------------------------------------------ */
+
 long sign_extend32(long value, unsigned int bit)
 {
-    if (bit == 0 || bit >= 32) return value;
+    if (bit == 0 || bit >= 32)
+        return value;
+
     int32_t v = (int32_t)value;
     int shift = 32 - (int)bit;
     return (long)((v << shift) >> shift);
 }
+
+/* Force export the exact symbol the linker is looking for */
+__attribute__((used))
+__attribute__((visibility("default")))
+long _sign_extend32(long value, unsigned int bit)
+{
+    return sign_extend32(value, bit);
+}
+/* Force export for kext linker */
+asm(".global _sign_extend32");
 
 /* ------------------------------------------------------------------ */
 /*  Global DMA / PCI / USB ops pointers                                 */
