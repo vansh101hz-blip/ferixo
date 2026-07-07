@@ -17,8 +17,8 @@ jobs:
           submodules: recursive
           path: Feixiao
 
-      - name: Clone rtw88-stable
-        run: git clone --depth 1 https://github.com/thegwchr/rtw88-stable.git
+      - name: Clone stabiler88w
+        run: git clone --depth 1 https://github.com/vansh101hz-blip/stabler88w.git stabiler88w
 
       - name: Download firmware blobs
         run: |
@@ -33,6 +33,8 @@ jobs:
           ls -lh *.bin
 
       - name: Build kext and ctl
+        env:
+          RTW88_STABLE_REPO: ${{ github.workspace }}/stabler88w
         run: make all
         working-directory: Feixiao
 
